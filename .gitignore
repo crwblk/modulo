@@ -1,0 +1,45 @@
+# Dependency directories
+node_modules/
+.npm-cache/
+
+# Build outputs
+/dist
+/ui/dist
+
+# Registry Storage (private data)
+/storage
+/test-storage
+
+# Env and local configs
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/logs
+
+# Test coverage
+/coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ESLint cache
+.eslintcache
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Husky
+.husky/_/
+
+# IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
