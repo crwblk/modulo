@@ -1,4 +1,4 @@
-# Modulo
+# 🐦‍⬛ modulo
 
 A lightweight, secure, open-source private npm registry built with TypeScript, Express 5, and a modern React UI.
 
@@ -250,7 +250,7 @@ storage/
 
 ## 🔒 Security
 
-Modulo includes enterprise-grade security features out of the box:
+modulo includes enterprise-grade security features out of the box:
 
 - **Helmet** - Sets secure HTTP headers (X-Content-Type-Options, X-Frame-Options, etc.)
 - **Rate Limiting** - Prevents abuse (1000 req/15min general, 50 req/15min for publish)
@@ -318,9 +318,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 This project is open-source and licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-## 🆚 Why Modulo?
+## 🆚 Why modulo?
 
-| Feature            | Modulo        | Verdaccio   |
+| Feature            | modulo        | Verdaccio   |
 | ------------------ | ------------- | ----------- |
 | Database Required  | ❌ No         | ✅ Yes      |
 | Setup Complexity   | 🟢 Simple     | 🟡 Moderate |
@@ -332,7 +332,7 @@ This project is open-source and licensed under the MIT License. See [LICENSE](LI
 | React Frontend     | ✅ React 19   | 🟡 Legacy   |
 | Framer Motion      | ✅ Animations | ❌ No       |
 
-**Choose Modulo when you need:**
+**Choose modulo when you need:**
 
 - A simple, lightweight private registry
 - Easy deployment without database complexity
