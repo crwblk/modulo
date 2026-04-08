@@ -2,8 +2,6 @@
 
 A lightweight, secure, open-source private npm registry built with TypeScript, Express 5, and a modern React UI.
 
-![Modulo UI Preview](https://via.placeholder.com/1000x600/0f172a/6366f1?text=Modulo+Registry+UI)
-
 ## ✨ Features
 
 - **Hybrid Registry** - Stores private packages locally, proxies public requests to `registry.npmjs.org` (configurable)
@@ -318,7 +316,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## 📄 License
 
-This project is open-source and licensed under the ISC License. See [LICENSE](LICENSE) for details.
+This project is open-source and licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## 🆚 Why Modulo?
 
