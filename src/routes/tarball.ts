@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Storage } from "../storage/fs";
-import { preventPathTraversal } from "../middleware/security";
+import { preventPathTraversal, isValidPackageName, isValidFilename } from "../middleware/security";
 import { cacheControl } from "../middleware/cache";
 import { logger } from "../utils/logger";
 import { getParam } from "../utils/params";
@@ -26,6 +26,13 @@ tarballRouter.get(
 
       // Not found locally. Redirect to public registry for public packages (if proxy enabled)
       if (config.enablePublicProxy) {
+        // Validate inputs before constructing redirect URL to prevent open redirect
+        if (!isValidPackageName(pkgName) || !isValidFilename(filename)) {
+          return res.status(400).json({
+            error: "Invalid package name or filename format",
+            code: "INVALID_INPUT",
+          });
+        }
         const NPM_REGISTRY = "https://registry.npmjs.org";
         const redirectUrl = `${NPM_REGISTRY}/${pkgName}/-/${filename}`;
         logger.debug(`Redirecting tarball request to ${redirectUrl}`, {

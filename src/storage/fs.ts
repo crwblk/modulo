@@ -4,6 +4,7 @@ import type { ReadStream } from "fs";
 import { createReadStream } from "fs";
 import type { PackageMetadata } from "../types";
 import { logger } from "../utils/logger";
+import { isValidPackageName, isValidFilename } from "../middleware/security";
 
 let STORAGE_DIR = path.resolve(process.cwd(), "storage");
 let METADATA_DIR = path.join(STORAGE_DIR, "metadata");
@@ -24,6 +25,9 @@ export const Storage = {
   },
 
   async getPackageMetadata(name: string): Promise<PackageMetadata | null> {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
     const filePath = path.join(METADATA_DIR, `${name}.json`);
     if (await fs.pathExists(filePath)) {
       return await fs.readJson(filePath);
@@ -36,6 +40,9 @@ export const Storage = {
    * This prevents corruption from concurrent writes
    */
   async savePackageMetadata(name: string, metadata: PackageMetadata) {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
     const filePath = path.join(METADATA_DIR, `${name}.json`);
     const tempFile = `${filePath}.tmp.${Date.now()}.${process.pid}`;
     try {
@@ -52,6 +59,9 @@ export const Storage = {
    * Delete package metadata file
    */
   async deletePackageMetadata(name: string) {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
     const filePath = path.join(METADATA_DIR, `${name}.json`);
     if (await fs.pathExists(filePath)) {
       await fs.remove(filePath);
@@ -59,6 +69,12 @@ export const Storage = {
   },
 
   async saveTarball(name: string, filename: string, data: Buffer) {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
+    if (!isValidFilename(filename)) {
+      throw new Error("Invalid filename format");
+    }
     const pkgDir = path.join(TARBALLS_DIR, name);
     await fs.ensureDir(pkgDir);
     const filePath = path.join(pkgDir, filename);
@@ -66,6 +82,12 @@ export const Storage = {
   },
 
   async getTarball(name: string, filename: string): Promise<Buffer | null> {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
+    if (!isValidFilename(filename)) {
+      throw new Error("Invalid filename format");
+    }
     const filePath = path.join(TARBALLS_DIR, name, filename);
     if (await fs.pathExists(filePath)) {
       return await fs.readFile(filePath);
@@ -74,6 +96,12 @@ export const Storage = {
   },
 
   getTarballStream(name: string, filename: string): ReadStream | null {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
+    if (!isValidFilename(filename)) {
+      throw new Error("Invalid filename format");
+    }
     const filePath = path.join(TARBALLS_DIR, name, filename);
     if (!fs.pathExistsSync(filePath)) {
       return null;
@@ -85,6 +113,12 @@ export const Storage = {
    * Delete a tarball file
    */
   async deleteTarball(name: string, filename: string) {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
+    if (!isValidFilename(filename)) {
+      throw new Error("Invalid filename format");
+    }
     const filePath = path.join(TARBALLS_DIR, name, filename);
     if (await fs.pathExists(filePath)) {
       await fs.remove(filePath);
@@ -95,6 +129,9 @@ export const Storage = {
    * Delete entire package tarball directory
    */
   async deleteTarballDir(name: string) {
+    if (!isValidPackageName(name)) {
+      throw new Error("Invalid package name format");
+    }
     const pkgDir = path.join(TARBALLS_DIR, name);
     if (await fs.pathExists(pkgDir)) {
       await fs.remove(pkgDir);

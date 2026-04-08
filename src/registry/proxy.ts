@@ -1,5 +1,6 @@
 import { config } from "../config";
 import { logger } from "../utils/logger";
+import { isValidPackageName } from "../middleware/security";
 
 const NPM_REGISTRY = "https://registry.npmjs.org";
 
@@ -8,6 +9,11 @@ export const Proxy = {
     if (!config.enablePublicProxy) {
       logger.debug("Public proxy is disabled", { packageName });
       return null;
+    }
+
+    // Validate package name to prevent SSRF attacks
+    if (!isValidPackageName(packageName)) {
+      throw new Error("Invalid package name format");
     }
 
     try {
