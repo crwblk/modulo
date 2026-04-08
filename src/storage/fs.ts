@@ -17,6 +17,19 @@ export function __setStorageDirs(baseDir: string) {
   TARBALLS_DIR = path.join(baseDir, "tarballs");
 }
 
+/**
+ * Normalize a path and verify it stays within the expected root directory.
+ * Throws if the resolved path escapes the root.
+ */
+function safeResolve(rootDir: string, ...segments: string[]): string {
+  const resolved = path.resolve(rootDir, ...segments);
+  const normalizedRoot = path.resolve(rootDir);
+  if (!resolved.startsWith(normalizedRoot)) {
+    throw new Error("Path traversal detected: constructed path escapes root directory");
+  }
+  return resolved;
+}
+
 export const Storage = {
   async ensureDirs() {
     await fs.ensureDir(METADATA_DIR);
@@ -28,7 +41,7 @@ export const Storage = {
     if (!isValidPackageName(name)) {
       throw new Error("Invalid package name format");
     }
-    const filePath = path.join(METADATA_DIR, `${name}.json`);
+    const filePath = safeResolve(METADATA_DIR, `${name}.json`);
     if (await fs.pathExists(filePath)) {
       return await fs.readJson(filePath);
     }
@@ -43,7 +56,7 @@ export const Storage = {
     if (!isValidPackageName(name)) {
       throw new Error("Invalid package name format");
     }
-    const filePath = path.join(METADATA_DIR, `${name}.json`);
+    const filePath = safeResolve(METADATA_DIR, `${name}.json`);
     const tempFile = `${filePath}.tmp.${Date.now()}.${process.pid}`;
     try {
       await fs.writeJson(tempFile, metadata, { spaces: 2 });
@@ -62,7 +75,7 @@ export const Storage = {
     if (!isValidPackageName(name)) {
       throw new Error("Invalid package name format");
     }
-    const filePath = path.join(METADATA_DIR, `${name}.json`);
+    const filePath = safeResolve(METADATA_DIR, `${name}.json`);
     if (await fs.pathExists(filePath)) {
       await fs.remove(filePath);
     }
@@ -75,9 +88,9 @@ export const Storage = {
     if (!isValidFilename(filename)) {
       throw new Error("Invalid filename format");
     }
-    const pkgDir = path.join(TARBALLS_DIR, name);
+    const pkgDir = safeResolve(TARBALLS_DIR, name);
     await fs.ensureDir(pkgDir);
-    const filePath = path.join(pkgDir, filename);
+    const filePath = safeResolve(pkgDir, filename);
     await fs.writeFile(filePath, data);
   },
 
@@ -88,7 +101,7 @@ export const Storage = {
     if (!isValidFilename(filename)) {
       throw new Error("Invalid filename format");
     }
-    const filePath = path.join(TARBALLS_DIR, name, filename);
+    const filePath = safeResolve(TARBALLS_DIR, name, filename);
     if (await fs.pathExists(filePath)) {
       return await fs.readFile(filePath);
     }
@@ -102,7 +115,7 @@ export const Storage = {
     if (!isValidFilename(filename)) {
       throw new Error("Invalid filename format");
     }
-    const filePath = path.join(TARBALLS_DIR, name, filename);
+    const filePath = safeResolve(TARBALLS_DIR, name, filename);
     if (!fs.pathExistsSync(filePath)) {
       return null;
     }
@@ -119,7 +132,7 @@ export const Storage = {
     if (!isValidFilename(filename)) {
       throw new Error("Invalid filename format");
     }
-    const filePath = path.join(TARBALLS_DIR, name, filename);
+    const filePath = safeResolve(TARBALLS_DIR, name, filename);
     if (await fs.pathExists(filePath)) {
       await fs.remove(filePath);
     }
@@ -132,7 +145,7 @@ export const Storage = {
     if (!isValidPackageName(name)) {
       throw new Error("Invalid package name format");
     }
-    const pkgDir = path.join(TARBALLS_DIR, name);
+    const pkgDir = safeResolve(TARBALLS_DIR, name);
     if (await fs.pathExists(pkgDir)) {
       await fs.remove(pkgDir);
     }
