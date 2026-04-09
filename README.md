@@ -1,6 +1,6 @@
 # 🐦‍⬛ modulo
 
-A lightweight, secure, open-source private npm registry built with TypeScript, Express 5, and a modern React UI.
+A lightweight, high-performance private npm registry for your modern development workflow.
 
 ## ✨ Features
 
@@ -16,46 +16,6 @@ A lightweight, secure, open-source private npm registry built with TypeScript, E
 - **Zero Database** - File-based storage with atomic writes, no database required
 - **Type-Safe** - Full TypeScript coverage across backend and frontend
 - **Error Codes** - Consistent error responses with machine-readable codes
-
-## 📦 Technical Stack
-
-### Backend
-
-| Layer          | Technology         | Version |
-| -------------- | ------------------ | ------- |
-| **Runtime**    | Node.js            | v18+    |
-| **Framework**  | Express            | 5.2.1   |
-| **Language**   | TypeScript         | 6.0.2   |
-| **Validation** | Zod                | 4.3.6   |
-| **Security**   | Helmet             | 8.1.0   |
-| **Rate Limit** | express-rate-limit | 8.3.2   |
-| **CORS**       | cors               | 2.8.6   |
-| **Filesystem** | fs-extra           | 11.3.4  |
-| **Logging**    | Winston            | 3.19.0  |
-| **Body Parse** | body-parser        | 2.2.2   |
-| **Env Config** | dotenv             | 17.4.0  |
-
-### Frontend (UI)
-
-| Layer           | Technology                        | Version |
-| --------------- | --------------------------------- | ------- |
-| **Framework**   | React                             | 19.2.4  |
-| **Build Tool**  | Vite                              | 8.0.1   |
-| **Routing**     | React Router DOM                  | 7.14.0  |
-| **Animations**  | Framer Motion                     | 12.38.0 |
-| **Icons**       | Lucide React                      | 1.7.0   |
-| **HTTP Client** | Axios                             | 1.14.0  |
-| **Fonts**       | Plus Jakarta Sans, JetBrains Mono | -       |
-
-### Dev & Testing
-
-| Tool            | Purpose                      |
-| --------------- | ---------------------------- |
-| **Vitest**      | Test runner with V8 coverage |
-| **Supertest**   | HTTP integration testing     |
-| **ESLint**      | Code linting (backend + UI)  |
-| **Husky**       | Git pre-commit hooks         |
-| **lint-staged** | Run linters on staged files  |
 
 ## 🚀 Getting Started
 
