@@ -1,7 +1,7 @@
 {
   "name": "modulo",
   "version": "0.0.1",
-  "description": "A lightweight, secure, open-source private npm registry built with TypeScript, Express 5, and a modern React UI",
+  "description": "A lightweight, high-performance private npm registry for your modern development workflow",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
