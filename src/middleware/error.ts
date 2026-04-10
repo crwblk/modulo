@@ -22,22 +22,26 @@ export class AppError extends Error {
 }
 
 /**
- * Generate error code from HTTP status code
+ * Error code mapping for consistent API responses
+ */
+const ERROR_CODES: Record<number, string> = {
+  400: "BAD_REQUEST",
+  401: "UNAUTHORIZED",
+  403: "FORBIDDEN",
+  404: "NOT_FOUND",
+  409: "CONFLICT",
+  422: "VALIDATION_ERROR",
+  429: "RATE_LIMITED",
+  500: "INTERNAL_ERROR",
+  502: "BAD_GATEWAY",
+  503: "SERVICE_UNAVAILABLE",
+};
+
+/**
+ * Get standardized error code from HTTP status code
  */
 const getErrorCode = (statusCode: number): string => {
-  const errorCodes: Record<number, string> = {
-    400: "BAD_REQUEST",
-    401: "UNAUTHORIZED",
-    403: "FORBIDDEN",
-    404: "NOT_FOUND",
-    409: "CONFLICT",
-    422: "VALIDATION_ERROR",
-    429: "RATE_LIMITED",
-    500: "INTERNAL_ERROR",
-    502: "BAD_GATEWAY",
-    503: "SERVICE_UNAVAILABLE",
-  };
-  return errorCodes[statusCode] || "INTERNAL_ERROR";
+  return ERROR_CODES[statusCode] || "INTERNAL_ERROR";
 };
 
 export const errorHandler = (

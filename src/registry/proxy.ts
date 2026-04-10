@@ -16,8 +16,13 @@ export const Proxy = {
       throw new Error("Invalid package name format");
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), config.requestTimeoutMs);
+
     try {
-      const response = await fetch(`${NPM_REGISTRY}/${packageName}`);
+      const response = await fetch(`${NPM_REGISTRY}/${packageName}`, {
+        signal: controller.signal,
+      });
       if (!response.ok) {
         if (response.status === 404) {
           return null; // Not found in public registry either
@@ -27,6 +32,13 @@ export const Proxy = {
       return await response.json();
     } catch (error: unknown) {
       if (error instanceof Error) {
+        if (error.name === "AbortError") {
+          logger.error("Proxy fetch timed out", {
+            packageName,
+            timeoutMs: config.requestTimeoutMs,
+          });
+          throw new Error("Proxy registry request timed out");
+        }
         logger.error("Proxy fetch error", {
           packageName,
           error: error.message,
@@ -37,6 +49,8 @@ export const Proxy = {
         }
       }
       throw error;
+    } finally {
+      clearTimeout(timeoutId);
     }
   },
 };

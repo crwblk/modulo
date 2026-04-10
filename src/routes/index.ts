@@ -5,6 +5,7 @@ import { tarballRouter } from "./tarball";
 import { authRouter } from "./auth";
 import { uiRouter } from "./ui";
 import path from "node:path";
+import { logger } from "../utils/logger";
 
 export const router = Router();
 
@@ -31,11 +32,19 @@ router.get("*splat", (req, res, next) => {
   // If it is an internal UI request, treat as SPA
   res.sendFile(path.join(UI_DIST_DIR, "index.html"), (err) => {
     if (err) {
-      res
-        .status(200)
-        .send(
-          "<h1>Modulo npm Registry</h1><p>UI is being built. Please check back later.</p>",
-        );
+      // Log the actual error for debugging
+      logger.error("Failed to serve UI index.html", { error: err.message });
+      // Only return fallback if file genuinely doesn't exist (not built yet)
+      const nodeErr = err as NodeJS.ErrnoException;
+      if (nodeErr.code === "ENOENT") {
+        return res
+          .status(200)
+          .send(
+            "<h1>Modulo npm Registry</h1><p>UI is being built. Please check back later.</p>",
+          );
+      }
+      // For other errors (permissions, etc.), pass to error handler
+      return next(err);
     }
   });
 });

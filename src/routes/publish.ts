@@ -55,7 +55,10 @@ publishRouter.put(
           const localUrl = `${req.protocol}://${req.get("host")}/${pkgName}/-/${filename}`;
 
           for (const version in payload.versions) {
-            if (payload.versions[version].dist.tarball.endsWith(filename)) {
+            const originalTarball = payload.versions[version].dist.tarball;
+            // Extract just the filename from the tarball URL for exact matching
+            const originalFilename = originalTarball.split("/").pop();
+            if (originalFilename === filename) {
               payload.versions[version].dist.tarball = localUrl;
             }
           }
@@ -139,7 +142,7 @@ publishRouter.put(
           requestId: req.id,
         });
         for (const filename of savedTarballs) {
-          await Storage.deleteTarball(pkgName, filename).catch(() => {});
+          await Storage.deleteTarball(pkgName, filename).catch(() => { });
         }
       }
       next(error);

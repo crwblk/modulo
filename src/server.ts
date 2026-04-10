@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import fs from "fs-extra";
@@ -37,7 +36,6 @@ export function createServer() {
 
   // Custom parsing for npm payloads which are often large and have a specific format
   app.use(express.json({ limit: config.maxUploadSize }));
-  app.use(bodyParser.urlencoded({ extended: true, limit: config.maxUploadSize }));
 
   // Request ID tracing
   app.use(requestIdMiddleware);

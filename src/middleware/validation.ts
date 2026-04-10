@@ -1,6 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ZodSchema, ZodIssue } from "zod";
+import type { ZodSchema } from "zod";
 import { ZodError } from "zod";
+
+/**
+ * Format ZodError issues into a human-readable message
+ */
+const formatValidationMessage = (error: ZodError): string => {
+  return error.issues
+    .map((e) => `${e.path.join(".")}: ${e.message}`)
+    .join(", ");
+};
 
 /**
  * Middleware factory to validate request body against a Zod schema
@@ -12,10 +21,11 @@ export const validateBody = (schema: ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const message = (error.issues as ZodIssue[])
-          .map((e) => `${e.path.join(".")}: ${e.message}`)
-          .join(", ");
-        return res.status(400).json({ error: `Validation failed: ${message}` });
+        const message = formatValidationMessage(error);
+        return res.status(400).json({
+          error: `Validation failed: ${message}`,
+          code: "VALIDATION_ERROR",
+        });
       }
       next(error);
     }
@@ -33,10 +43,11 @@ export const validateParams = <T>(schema: ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const message = (error.issues as ZodIssue[])
-          .map((e) => `${e.path.join(".")}: ${e.message}`)
-          .join(", ");
-        return res.status(400).json({ error: `Validation failed: ${message}` });
+        const message = formatValidationMessage(error);
+        return res.status(400).json({
+          error: `Validation failed: ${message}`,
+          code: "VALIDATION_ERROR",
+        });
       }
       next(error);
     }
@@ -54,10 +65,11 @@ export const validateQuery = <T>(schema: ZodSchema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const message = (error.issues as ZodIssue[])
-          .map((e) => `${e.path.join(".")}: ${e.message}`)
-          .join(", ");
-        return res.status(400).json({ error: `Validation failed: ${message}` });
+        const message = formatValidationMessage(error);
+        return res.status(400).json({
+          error: `Validation failed: ${message}`,
+          code: "VALIDATION_ERROR",
+        });
       }
       next(error);
     }
